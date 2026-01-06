@@ -130,7 +130,7 @@
 
         <div class="status" id="statusText">
             Verifying access requirements…
-            (<span class="timer" id="timer">10:00</span>)
+            (<span class="timer" id="timer">01:00</span>)
         </div>
 
         <div class="data-area" id="dataBox">
@@ -145,7 +145,8 @@
 </div>
 
 <script>
-    let timeLeft = 600;
+    // 1 minute = 60 seconds
+    let timeLeft = 60;
 
     const timerEl = document.getElementById("timer");
     const dataBox = document.getElementById("dataBox");
