@@ -14,7 +14,6 @@
         color:#00ff9c;
     }
 
-    /* scanlines */
     body::before{
         content:"";
         position:fixed;
@@ -39,11 +38,10 @@
         text-align:center;
         font-size:26px;
         font-weight:bold;
-        margin-bottom:28px;
+        margin-bottom:26px;
         text-shadow:0 0 15px #00ff9c;
     }
 
-    /* OWNER BADGE — clearly visible */
     .owner-badge{
         text-align:center;
         margin-bottom:26px;
@@ -90,10 +88,10 @@
     .data-area{
         border:1px dashed #00ff9c;
         border-radius:6px;
-        padding:24px;
-        text-align:center;
+        padding:22px;
         background:rgba(0,255,156,0.05);
-        min-height:80px;
+        min-height:90px;
+        line-height:1.7;
     }
 
     .blink{ animation:blink 1s infinite; }
@@ -131,7 +129,7 @@
         </div>
 
         <div class="status" id="statusText">
-            Fetching WhatsApp data… Please wait
+            Verifying access requirements…
             (<span class="timer" id="timer">10:00</span>)
         </div>
 
@@ -141,13 +139,12 @@
     </div>
 
     <div class="footer">
-        WHATSAPP SECURE INTERFACE • TRACE SHIELD ACTIVE
+        WHATSAPP SECURE INTERFACE • SESSION STANDBY MODE
     </div>
 
 </div>
 
 <script>
-    // 10 minutes = 600 seconds
     let timeLeft = 600;
 
     const timerEl = document.getElementById("timer");
@@ -168,10 +165,19 @@
 
         if(timeLeft <= 0){
             clearInterval(countdown);
-            statusText.textContent = "Data retrieval failed";
+
+            statusText.textContent = "Access conditions not satisfied";
+
             dataBox.innerHTML = `
-                Your data is not showing due to your network connection.<br>
-                Kindly check your connection and try again.
+                Secure session established successfully.<br>
+                However, data output is currently unavailable due to one or more local conditions:<br><br>
+
+                • Network stability could not be verified<br>
+                • Required permissions were not granted<br>
+                • VPN / proxy interference detected<br>
+                • Session timeout from client side<br><br>
+
+                Please review your connection environment and retry.
             `;
         }
     },1000);
