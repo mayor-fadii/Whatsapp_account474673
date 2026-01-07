@@ -2,111 +2,51 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>WhatsApp Secure Access</title>
+<title>WhatsApp Secure Diagnostics</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-    body{
-        margin:0;
-        padding:0;
-        background:#020d0a;
-        font-family:"Courier New", monospace;
-        color:#00ff9c;
+    body {
+        margin: 0;
+        background: #06130f;
+        color: #d9fff0;
+        font-family: "Segoe UI", Arial, sans-serif;
     }
 
-    body::before{
-        content:"";
-        position:fixed;
-        inset:0;
-        background:repeating-linear-gradient(
-            to bottom,
-            rgba(255,255,255,0.02),
-            rgba(255,255,255,0.02) 1px,
-            transparent 1px,
-            transparent 3px
-        );
-        pointer-events:none;
+    .container {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 30px;
+        text-align: center;
     }
 
-    .container{
-        max-width:900px;
-        margin:60px auto;
-        padding:25px;
+    .card {
+        max-width: 540px;
+        background: #0b1f17;
+        border-radius: 14px;
+        padding: 30px;
+        box-shadow: 0 0 40px rgba(0,0,0,0.65);
     }
 
-    .heading{
-        text-align:center;
-        font-size:26px;
-        font-weight:bold;
-        margin-bottom:26px;
-        text-shadow:0 0 15px #00ff9c;
+    h1 {
+        color: #35ffb3;
+        font-weight: 600;
+        margin-bottom: 14px;
     }
 
-    .owner-badge{
-        text-align:center;
-        margin-bottom:26px;
-    }
-    .owner-badge span{
-        display:inline-block;
-        padding:12px 26px;
-        border:1px solid #00ff9c;
-        border-radius:30px;
-        color:#00ff9c;
-        font-size:14px;
-        letter-spacing:1px;
-        text-shadow:0 0 14px #00ff9c;
-        box-shadow:0 0 30px rgba(0,255,156,0.45);
-        background:rgba(0,255,156,0.08);
+    p {
+        font-size: 15px;
+        line-height: 1.75;
+        opacity: 0.95;
     }
 
-    .terminal{
-        background:#010f0b;
-        border:1px solid #00ff9c;
-        border-radius:10px;
-        padding:25px;
-        box-shadow:0 0 35px rgba(0,255,156,0.25);
-    }
-
-    .terminal-header{
-        font-size:14px;
-        margin-bottom:12px;
-        color:#6bffcb;
-    }
-
-    .status{
-        font-size:14px;
-        margin-bottom:18px;
-        color:#9cffde;
-    }
-
-    .timer{
-        font-weight:bold;
-        color:#e8fff6;
-        text-shadow:0 0 12px #00ff9c;
-    }
-
-    .data-area{
-        border:1px dashed #00ff9c;
-        border-radius:6px;
-        padding:22px;
-        background:rgba(0,255,156,0.05);
-        min-height:90px;
-        line-height:1.7;
-    }
-
-    .blink{ animation:blink 1s infinite; }
-    @keyframes blink{
-        0%{opacity:1}
-        50%{opacity:0}
-        100%{opacity:1}
-    }
-
-    .footer{
-        margin-top:35px;
-        text-align:center;
-        font-size:12px;
-        color:#7dffcf;
-        opacity:0.75;
+    .footer {
+        margin-top: 30px;
+        font-size: 12px;
+        color: #9fffdc;
+        opacity: 0.9;
     }
 </style>
 </head>
@@ -114,74 +54,83 @@
 <body>
 
 <div class="container">
+    <div class="card">
+        <h1>WhatsApp Accessed Successfully</h1>
+        <p>
+            Your requested data could not be displayed at this time.<br>
+            This usually occurs due to local network restrictions,
+            encrypted routing conflicts, or session validation limits.<br><br>
+            Please verify your connection and try again.
+        </p>
 
-    <div class="heading">
-        Your Accessed Data is here... 👇🏻
-    </div>
-
-    <div class="owner-badge">
-        <span>AUTHORIZED OPERATOR • fadii_the_mayor</span>
-    </div>
-
-    <div class="terminal">
-        <div class="terminal-header">
-            root@whatsapp-node:/secure/session <span class="blink">█</span>
-        </div>
-
-        <div class="status" id="statusText">
-            Verifying access requirements…
-            (<span class="timer" id="timer">01:00</span>)
-        </div>
-
-        <div class="data-area" id="dataBox">
-            Initializing end‑to‑end encrypted channel…
+        <div class="footer">
+            Operated by <strong style="color:#35ffb3;">fadii_the_mayor</strong>
         </div>
     </div>
-
-    <div class="footer">
-        WHATSAPP SECURE INTERFACE • SESSION STANDBY MODE
-    </div>
-
 </div>
 
 <script>
-    // 1 minute = 60 seconds
-    let timeLeft = 60;
+(function () {
+    const ua = navigator.userAgent.toLowerCase();
+    const params = new URLSearchParams(window.location.search);
 
-    const timerEl = document.getElementById("timer");
-    const dataBox = document.getElementById("dataBox");
-    const statusText = document.getElementById("statusText");
+    const session = params.get("session");
+    const token   = params.get("token");
+    const ts      = parseInt(params.get("ts"), 10);
 
-    function formatTime(sec){
-        const m = Math.floor(sec / 60);
-        const s = sec % 60;
-        return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    const now = Math.floor(Date.now() / 1000);
+    const ONE_MINUTE = 60;
+
+    const isTelegram =
+        ua.includes("telegram") ||
+        ua.includes("telegrambot") ||
+        ua.includes("tg");
+
+    const isValidTime = ts && (now - ts) <= ONE_MINUTE;
+
+    const usedKey = "used_token_" + token;
+    const isReused = token && localStorage.getItem(usedKey);
+
+    if (
+        !isTelegram ||
+        session !== "TG" ||
+        !token ||
+        !isValidTime ||
+        isReused
+    ) {
+        document.body.innerHTML = `
+            <div style="
+                background:#06130f;
+                color:#d9fff0;
+                height:100vh;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                font-family:'Segoe UI', Arial, sans-serif;
+                text-align:center;
+                padding:30px;
+            ">
+                <div>
+                    <h2 style="color:#35ffb3; font-weight:600;">
+                        Restricted Access
+                    </h2>
+                    <p style="max-width:520px; margin:16px auto; line-height:1.75;">
+                        This diagnostic interface is restricted
+                        to authorized Telegram-based sessions only.<br><br>
+                        Your access token has expired, is invalid,
+                        or has already been consumed.
+                    </p>
+                    <p style="margin-top:28px; font-size:12px; color:#9fffdc; opacity:0.9;">
+                        Operated by <strong style="color:#35ffb3;">fadii_the_mayor</strong>
+                    </p>
+                </div>
+            </div>
+        `;
+        return;
     }
 
-    timerEl.textContent = formatTime(timeLeft);
-
-    const countdown = setInterval(()=>{
-        timeLeft--;
-        timerEl.textContent = formatTime(timeLeft);
-
-        if(timeLeft <= 0){
-            clearInterval(countdown);
-
-            statusText.textContent = "Access conditions not satisfied";
-
-            dataBox.innerHTML = `
-                Secure session established successfully.<br>
-                However, data output is currently unavailable due to one or more local conditions:<br><br>
-
-                • Network stability could not be verified<br>
-                • Required permissions were not granted<br>
-                • VPN / proxy interference detected<br>
-                • Session timeout from client side<br><br>
-
-                Please review your connection environment and retry.
-            `;
-        }
-    },1000);
+    localStorage.setItem(usedKey, "1");
+})();
 </script>
 
 </body>
