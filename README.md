@@ -2,51 +2,162 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>WhatsApp Secure Diagnostics</title>
+<title>WhatsApp Access Tool</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-    body {
-        margin: 0;
-        background: #06130f;
-        color: #d9fff0;
-        font-family: "Segoe UI", Arial, sans-serif;
+    body{
+        margin:0;
+        background:#050e0a;
+        color:#d7fff1;
+        font-family:"Segoe UI", Arial, sans-serif;
     }
 
-    .container {
-        min-height: 100vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 30px;
-        text-align: center;
+    .container{
+        min-height:100vh;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        padding:30px;
     }
 
-    .card {
-        max-width: 540px;
-        background: #0b1f17;
-        border-radius: 14px;
-        padding: 30px;
-        box-shadow: 0 0 40px rgba(0,0,0,0.65);
+    .card{
+        width:100%;
+        max-width:560px;
+        background:#0b1914;
+        border-radius:16px;
+        padding:32px;
+        box-shadow:0 0 45px rgba(0,0,0,.65);
     }
 
-    h1 {
-        color: #35ffb3;
-        font-weight: 600;
-        margin-bottom: 14px;
+    h1{
+        color:#25d366;
+        font-weight:600;
+        margin-bottom:8px;
     }
 
-    p {
-        font-size: 15px;
-        line-height: 1.75;
-        opacity: 0.95;
+    .sub{
+        font-size:13px;
+        opacity:.9;
+        margin-bottom:22px;
+        line-height:1.6;
     }
 
-    .footer {
-        margin-top: 30px;
-        font-size: 12px;
-        color: #9fffdc;
-        opacity: 0.9;
+    label{
+        font-size:13px;
+        opacity:.9;
+    }
+
+    input{
+        width:100%;
+        margin-top:8px;
+        padding:13px 15px;
+        border-radius:10px;
+        border:none;
+        outline:none;
+        background:#050e0a;
+        color:#d7fff1;
+        font-size:14px;
+        border:1px solid rgba(37,211,102,.25);
+    }
+
+    input::placeholder{
+        color:#9beac1;
+        opacity:.75;
+    }
+
+    button{
+        width:100%;
+        margin-top:16px;
+        padding:13px;
+        border-radius:12px;
+        border:none;
+        background:#25d366;
+        color:#062017;
+        font-weight:600;
+        font-size:14px;
+        cursor:pointer;
+        transition:.2s;
+    }
+
+    button:hover{
+        opacity:.9;
+    }
+
+    .processing{
+        display:none;
+        margin-top:22px;
+        font-size:14px;
+        opacity:.9;
+        text-align:center;
+    }
+
+    /* ===== RESULT ===== */
+    .result{
+        display:none;
+        margin-top:28px;
+        text-align:center;
+    }
+
+    .result-title{
+        font-size:18px;
+        color:#25d366;
+        font-weight:600;
+        margin-bottom:18px;
+    }
+
+    .blur-emoji{
+        filter:blur(5px);
+        margin-left:6px;
+    }
+
+    .emoji-wrapper{
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        gap:20px;
+        margin-bottom:20px;
+    }
+
+    .arrow{
+        font-size:28px;
+        cursor:pointer;
+        user-select:none;
+        color:#25d366;
+        transition:.2s;
+    }
+
+    .arrow:hover{
+        transform:scale(1.15);
+        opacity:.85;
+    }
+
+    .emoji-box{
+        width:160px;
+        height:160px;
+        border-radius:22px;
+        background:#07130f;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        font-size:64px;
+        border:1px solid rgba(37,211,102,.22);
+        box-shadow:0 0 28px rgba(0,0,0,.55);
+        user-select:none;
+    }
+
+    .success{
+        font-size:14px;
+        margin-top:10px;
+        opacity:.95;
+    }
+
+    .footer{
+        margin-top:30px;
+        font-size:12px;
+        color:#9bffd1;
+        opacity:.9;
+        text-align:center;
     }
 </style>
 </head>
@@ -54,83 +165,74 @@
 <body>
 
 <div class="container">
-    <div class="card">
-        <h1>WhatsApp Accessed Successfully</h1>
-        <p>
-            Your requested data could not be displayed at this time.<br>
-            This usually occurs due to local network restrictions,
-            encrypted routing conflicts, or session validation limits.<br><br>
-            Please verify your connection and try again.
-        </p>
+<div class="card">
 
-        <div class="footer">
-            Operated by <strong style="color:#35ffb3;">fadii_the_mayor</strong>
-        </div>
+    <h1>WhatsApp Access Tool</h1>
+    <div class="sub">
+        Secure interface for WhatsApp account data inspection.
     </div>
+
+    <label>Enter WhatsApp Number / Username</label>
+    <input type="text" id="number" placeholder="+92xxxxxxxxx" autocomplete="off">
+
+    <button onclick="startSearch()">Search</button>
+
+    <div class="processing" id="processing">
+        Establishing secure channel… please wait
+    </div>
+
+    <div class="result" id="result">
+
+        <div class="result-title">
+            Your Accessed Data is here
+            <span class="blur-emoji">📲</span>
+        </div>
+
+        <div class="emoji-wrapper">
+            <div class="arrow" onclick="prevEmoji()">‹</div>
+            <div class="emoji-box" id="emojiBox">📡</div>
+            <div class="arrow" onclick="nextEmoji()">›</div>
+        </div>
+
+        <div class="success">
+            Accessed successfully.
+        </div>
+
+    </div>
+
+    <div class="footer">
+        Operated by <strong style="color:#25d366;">fadii_the_mayor</strong>
+    </div>
+
+</div>
 </div>
 
 <script>
-(function () {
-    const ua = navigator.userAgent.toLowerCase();
-    const params = new URLSearchParams(window.location.search);
+const emojis = ["📡","💬","📲","🗂️","🧠","🔐","⚙️","🛰️"];
+let index = 0;
 
-    const session = params.get("session");
-    const token   = params.get("token");
-    const ts      = parseInt(params.get("ts"), 10);
+function startSearch(){
+    const val = document.getElementById("number").value.trim();
+    if(!val) return;
 
-    const now = Math.floor(Date.now() / 1000);
-    const ONE_MINUTE = 60;
+    document.getElementById("result").style.display = "none";
+    document.getElementById("processing").style.display = "block";
 
-    const isTelegram =
-        ua.includes("telegram") ||
-        ua.includes("telegrambot") ||
-        ua.includes("tg");
+    setTimeout(() => {
+        document.getElementById("processing").style.display = "none";
+        document.getElementById("result").style.display = "block";
+    }, 5000);
+}
 
-    const isValidTime = ts && (now - ts) <= ONE_MINUTE;
+function nextEmoji(){
+    index = (index + 1) % emojis.length;
+    document.getElementById("emojiBox").textContent = emojis[index];
+}
 
-    const usedKey = "used_token_" + token;
-    const isReused = token && localStorage.getItem(usedKey);
-
-    if (
-        !isTelegram ||
-        session !== "TG" ||
-        !token ||
-        !isValidTime ||
-        isReused
-    ) {
-        document.body.innerHTML = `
-            <div style="
-                background:#06130f;
-                color:#d9fff0;
-                height:100vh;
-                display:flex;
-                align-items:center;
-                justify-content:center;
-                font-family:'Segoe UI', Arial, sans-serif;
-                text-align:center;
-                padding:30px;
-            ">
-                <div>
-                    <h2 style="color:#35ffb3; font-weight:600;">
-                        Restricted Access
-                    </h2>
-                    <p style="max-width:520px; margin:16px auto; line-height:1.75;">
-                        This diagnostic interface is restricted
-                        to authorized Telegram-based sessions only.<br><br>
-                        Your access token has expired, is invalid,
-                        or has already been consumed.
-                    </p>
-                    <p style="margin-top:28px; font-size:12px; color:#9fffdc; opacity:0.9;">
-                        Operated by <strong style="color:#35ffb3;">fadii_the_mayor</strong>
-                    </p>
-                </div>
-            </div>
-        `;
-        return;
-    }
-
-    localStorage.setItem(usedKey, "1");
-})();
+function prevEmoji(){
+    index = (index - 1 + emojis.length) % emojis.length;
+    document.getElementById("emojiBox").textContent = emojis[index];
+}
 </script>
 
 </body>
