@@ -96,9 +96,13 @@ button{
     border-bottom:1px solid rgba(255,255,255,.08);
     font-size:14px;
 }
-.dots{
+.otp{
+    background:#ffffff;
+    color:#000;
+    padding:6px 14px;
+    border-radius:8px;
+    margin-left:5ch;
     letter-spacing:4px;
-    opacity:.85;
 }
 .footer{
     margin-top:26px;
@@ -130,11 +134,11 @@ button{
 </div>
 
 <div class="result" id="res">
-    <div class="row"><span>OTP</span><span class="dots">••••••</span></div>
+    <div class="row"><span>OTP</span><span class="otp">••••••</span></div>
 </div>
 
 <div class="footer">
-    Operated by <strong style="color:#25d366;">fadii_the_mayor</strong>
+    Managed by a private access verification authority
 </div>
 
 </div>
