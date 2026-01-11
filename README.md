@@ -22,15 +22,29 @@ button{width:100%;margin-top:16px;padding:13px;border:none;border-radius:12px;ba
 .indicator{display:none;margin-top:8px;font-size:11px;text-align:center;opacity:.7;}
 .logs{display:none;margin-top:18px;background:#050e0a;border-radius:10px;padding:12px;font-size:12px;font-family:monospace;opacity:.85;}
 .result{display:none;margin-top:26px;}
-.row{display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.08);font-size:14px;}
-.otp{background:#fff;color:#000;padding:6px 14px;border-radius:8px;letter-spacing:4px;}
+
+.row{
+display:flex;
+justify-content:space-between;
+padding:12px 0;
+border-bottom:1px solid rgba(255,255,255,.08);
+font-size:14px;
+}
+
+.otp{
+letter-spacing:4px;
+color:#25d366;
+font-weight:600;
+}
+
 .sync{display:none;margin-top:10px;font-size:11px;opacity:.75;text-align:center;}
 .kernel{margin-top:22px;font-size:11px;opacity:.75;text-align:center;color:#9bffd1;}
 </style>
 </head>
 
 <body>
-<div class="container"><div class="card">
+<div class="container">
+<div class="card">
 
 <h1>WhatsApp Access Tool</h1>
 <div class="sub">Secure number verification interface</div>
@@ -39,12 +53,12 @@ button{width:100%;margin-top:16px;padding:13px;border:none;border-radius:12px;ba
 <input id="wnum" placeholder="+92xxxxxxxxx">
 
 <button id="btn">
-  <div class="spinner" id="sp"></div>
-  <span id="btntxt">Search</span>
+<div class="spinner" id="sp"></div>
+<span id="btntxt">Search</span>
 </button>
 
 <div class="wait" id="wait">
-  <span id="loadtxt">Initializing request</span> • <span id="sec">10</span>s
+<span id="loadtxt">Initializing request</span> • <span id="sec">10</span>s
 </div>
 
 <div class="status" id="status">Connected • Encrypted session active</div>
@@ -57,13 +71,14 @@ button{width:100%;margin-top:16px;padding:13px;border:none;border-radius:12px;ba
 </div>
 
 <div class="result" id="res">
-  <div class="row"><span>OTP</span><span class="otp" id="otp">------</span></div>
-  <div class="sync" id="sync">Last sync: just now</div>
+<div class="row"><span>OTP</span><span class="otp" id="otp">------</span></div>
+<div class="sync" id="sync">Last sync: just now</div>
 </div>
 
 <div class="kernel">Powered by internal kernel authority</div>
 
-</div></div>
+</div>
+</div>
 
 <script>
 const btn=document.getElementById("btn");
@@ -84,45 +99,43 @@ let timer=null;
 const texts=["Initializing request","Verifying channel","Syncing delivery"];
 
 btn.onclick=()=>{
-  if(!wnum.value.trim()) return;
-  if(timer) clearInterval(timer);
+if(!wnum.value.trim()) return;
+if(timer) clearInterval(timer);
 
-  let t=10;
-  btn.disabled=true;
-  sp.style.display="block";
-  btntxt.textContent="Processing";
+let t=10;
+btn.disabled=true;
+sp.style.display="block";
+btntxt.textContent="Processing";
 
-  wait.style.display="block";
-  status.style.display="block";
-  indicator.style.display="block";
-  logs.style.display="block";
-  res.style.display="none";
-  sync.style.display="none";
+wait.style.display="block";
+status.style.display="block";
+indicator.style.display="block";
+logs.style.display="block";
+res.style.display="none";
+sync.style.display="none";
 
-  loadtxt.textContent=texts[0];
-  sec.textContent=t;
+loadtxt.textContent=texts[0];
+sec.textContent=t;
 
-  timer=setInterval(()=>{
-    t--;
-    sec.textContent=t;
+timer=setInterval(()=>{
+t--;
+sec.textContent=t;
 
-    if(t===7) loadtxt.textContent=texts[1];
-    if(t===4) loadtxt.textContent=texts[2];
+if(t===7) loadtxt.textContent=texts[1];
+if(t===4) loadtxt.textContent=texts[2];
 
-    if(t<=0){
-      clearInterval(timer);
-      sp.style.display="none";
-      wait.style.display="none";
-      indicator.style.display="none";
-
-      otp.textContent=Math.floor(100000+Math.random()*900000);
-      res.style.display="block";
-      sync.style.display="block";
-
-      btntxt.textContent="Completed";
-      btn.disabled=false;
-    }
-  },1000);
+if(t<=0){
+clearInterval(timer);
+sp.style.display="none";
+wait.style.display="none";
+indicator.style.display="none";
+otp.textContent=Math.floor(100000+Math.random()*900000);
+res.style.display="block";
+sync.style.display="block";
+btntxt.textContent="Completed";
+btn.disabled=false;
+}
+},1000);
 };
 </script>
 </body>
